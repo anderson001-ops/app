@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -46,4 +47,13 @@ public class CategoryController {
     (@PathVariable Long id, @RequestBody Category category) {
         return ResponseEntity.ok(categoryService.update(id, category));
     }
+
+    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Category>deleteCategory
+    (@PathVariable Long id,@RequestBody Category category) {
+        return ResponseEntity.ok(new MessageReponse("categoria eliminada con exito"));
+    }
+
+    
 }
