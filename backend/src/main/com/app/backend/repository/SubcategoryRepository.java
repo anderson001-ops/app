@@ -1,6 +1,6 @@
-package com.app.backend.repository;
+package com.main.app.backend.repository;
 
-import com.app.backend.model.Subcategory;
+import com.main.app.backend.model.Subcategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.Optional;

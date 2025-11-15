@@ -12,7 +12,7 @@ public class UserCreateRequest {
     public UserCreateRequest(){
 
     }
-    public String get Username(){
+    public String getUsername(){
         return username;
     }
     public void setUsername(String username){

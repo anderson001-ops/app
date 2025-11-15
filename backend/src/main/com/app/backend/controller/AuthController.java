@@ -1,10 +1,10 @@
 package com.main.app.backend.controller;
 
-import com.app.backend.dto.loginRequest;
-import com.app.backend.dto.loginResponse;
-import com.app.backend.model.User;
-import com.app.backend.repository.UserRepository;
-import com.app.backend.security.JwtTokenProvider;
+import com.main.app.backend.dto.loginRequest;
+import com.main.app.backend.dto.loginResponse;
+import com.main.app.backend.model.User;
+import com.main.app.backend.repository.UserRepository;
+import com.main.app.backend.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

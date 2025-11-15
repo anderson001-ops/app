@@ -1,7 +1,7 @@
 package com.main.app.backend.dto;
 
-import com.app.backend .dto.UserCreateRequest;
-import com.app.backend.dto.UserUpdateRequest;
+import com.main.app.backend .dto.UserCreateRequest;
+import com.main.app.backend.dto.UserUpdateRequest;
 import com.main.app.backend.model.User;
 import com.main.app.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,7 @@ public class UserService {
 
     //validar que el coordinador no pueda modificar el admin principal 
     if (id ==1L && isCoordinador()){
-        throw new RuntimeException("no tienes permiso para modicar el administrador principal")
+        throw new RuntimeException("no tienes permiso para modicar el administrador principal");
     }
     User.setUsername(request.getUsername());
     User.setEmail(request.getEmail());

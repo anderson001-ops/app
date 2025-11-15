@@ -1,7 +1,7 @@
-package com.app.backend.service;
+package com.main.app.backend.service;
 
-import com.app.backend.model.Subcategory;
-import com.app.backend.repository.SubcategoryRepository;
+import com.main.app.backend.model.Subcategory;
+import com.main.app.backend.repository.SubcategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -11,20 +11,22 @@ public class SubcategoryService {
     @Autowired
     private SubcategoryRepository subcategoryRepository;
 
-    public List<Subcategory> findAll() {
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    public List<Subcategory> findAll(){
         return subcategoryRepository.findAll();
     }
-
-    public Subcategory findById(Long categoryid){
-        return subcategoryRepository.findByCategoryId(Categoryid);
+    
+    public List<Subcategory> findByCategoryId(Long categoryId){
+        return subcategoryRepository.findByCategoryId(categoryId);
     }
 
     public Subcategory findById(Long id){
-        return subcategoryRepository.findById(id).orElseThrow(() ->
-        new RuntimeException("Subcategoria no encontrada"));
+        return subcategoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Subcategoría no encontrada"));
     }
 
-    public Subcategory create(Subcategory subcategory) {
+    public Subcategory create(Subcategory subcategory){
         return subcategoryRepository.save(subcategory);
     }
 
