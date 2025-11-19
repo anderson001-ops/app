@@ -1,13 +1,16 @@
 package com.app.backend.repository;
 
-import com.app.backend.model.Product;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 import java.util.List;
+import java.util.Optional;
 
-@Repository
-public interface ProductRepository extends JpaRepository<Product, Long>{
-    List<Product> findByCategoryId(Long categoryId);
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.app.backend.models.Product;
+
+public interface ProductRepository extends JpaRepository<Product, Long> {
+    Optional<Product> findByName(String name);
+    Boolean existsByPrice(Double price);
     List<Product> findBySubcategoryId(Long subcategoryId);
+    List<Product> findByCategoryId(Long categoryId);
+    Boolean existsByStock(Integer stock);
 }
-

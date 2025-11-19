@@ -1,31 +1,34 @@
 package com.app.backend.service;
 
-import com.app.backend.dto.UserCreateRequest;
-import com.app.backend.dto.UserUpdateRequest;
-import com.app.backend.model.User;
-import com.app.backend.repository.UserRepository;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import java.util.List;
+
+import com.app.backend.dto.UserCreateRequest;
+import com.app.backend.dto.UserUpdateRequest;
+import com.app.backend.models.User;
+import com.app.backend.repository.UserRepository;
 
 @Service
 public class UserService {
-
+    
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public List<User> findAll() {
+    public List<User> findAllUsers() {
         return userRepository.findAll();
     }
 
     public User findById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        return userRepository.findById(id).orElseThrow(() -> new 
+        RuntimeException("Usuario no encontrado"));
     }
 
     public User create(UserCreateRequest request) {
@@ -35,15 +38,16 @@ public class UserService {
         user.setEmail(request.getEmail());
         user.setRole(request.getRole());
         user.setActive(request.getActive() != null ? request.getActive() : true);
+
         return userRepository.save(user);
     }
 
-    public User update(Long id, UserUpdateRequest request) {
+    public User update (Long id, UserUpdateRequest request) {
         User user = findById(id);
-
-        // validar que el coordinador no pueda modificar el admin principal
-        if (id == 1L && isCoordinador()){
-            throw new RuntimeException("No tienes permiso para modificar el administrador principal");
+        
+        //validar que el cordinador no pueda modificar el admin principal
+        if(id == 1L && isCoordinator()) {
+            throw new RuntimeException("No tienes permiso para modificar este usuario");
         }
 
         user.setUsername(request.getUsername());
@@ -54,26 +58,31 @@ public class UserService {
         if (request.getPassword() != null && !request.getPassword().isEmpty()) {
             user.setPassword(passwordEncoder.encode(request.getPassword()));
         }
+
         return userRepository.save(user);
     }
 
-    private boolean isCoordinador(){
+    private boolean isCoordinator() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getAuthorities()!= null){
+        if (authentication != null && authentication.getAuthorities() != null) {
             return authentication.getAuthorities().stream()
-                    .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_COORDINADOR"));
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_COORDINADOR"));
         }
         return false;
     }
 
-    public void delete(Long id){
+    public void delete(Long id) {
         User user = findById(id);
 
-        // validar que no se elimine el usuario admin principal
-        if (id == 1L){
-            throw new RuntimeException("No tienes permiso para eliminar el administrador principal");
+        //validar que no se elimine el usuario admin principal
+        if (id == 1L) {
+            throw new RuntimeException("No se puede eliminar el administrador principal");
         }
-
+        // validar que el usuario exista
+        if (user == null) {
+            throw new RuntimeException("Usuario no encontrado");
+        }
+        
         userRepository.delete(user);
     }
 }

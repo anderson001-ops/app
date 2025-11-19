@@ -1,37 +1,43 @@
 package com.app.backend.service;
 
-import com.app.backend.model.Subcategory;
-import com.app.backend.repository.SubcategoryRepository;
-import com.app.backend.repository.CategoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.app.backend.models.Category;
+import com.app.backend.models.Subcategory;
+import com.app.backend.repository.SubcategoryRepository;
+
+
 @Service
-public class SubcategoryService {
+public class SubCategoryService {
+    
     @Autowired
     private SubcategoryRepository subcategoryRepository;
 
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryService categoryService;
 
-    public List<Subcategory> findAll(){
+    public List<Subcategory> findAll() {
         return subcategoryRepository.findAll();
     }
-    
-    public List<Subcategory> findByCategoryId(Long categoryId){
+
+        public List<Subcategory> findByCategoryId(Long categoryId) {
         return subcategoryRepository.findByCategoryId(categoryId);
     }
 
-    public Subcategory findById(Long id){
+    public Subcategory findById(Long id) {
         return subcategoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Subcategoría no encontrada"));
     }
 
-    public Subcategory create(Subcategory subcategory){
-        return subcategoryRepository.save(subcategory);
+    public Subcategory create(Subcategory request) {
+        Category category = categoryService.findById(request.getCategory().getId());
+        request.setCategory(category);
+        return subcategoryRepository.save(request);
     }
 
-    public Subcategory update(Long id, Subcategory subcategoryDetails){
+    public Subcategory update(Long id, Subcategory subcategoryDetails) {
         Subcategory subcategory = findById(id);
         subcategory.setName(subcategoryDetails.getName());
         subcategory.setDescription(subcategoryDetails.getDescription());
@@ -40,7 +46,7 @@ public class SubcategoryService {
         return subcategoryRepository.save(subcategory);
     }
 
-    public void delete(Long id){
+    public void delete(Long id) {
         Subcategory subcategory = findById(id);
         subcategoryRepository.delete(subcategory);
     }

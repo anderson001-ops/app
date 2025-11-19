@@ -1,6 +1,6 @@
 package com.app.backend.service;
 
-import com.app.backend.repository.UserRepository;
+import  com.app.backend.repository.UserRepository;
 import com.app.backend.repository.CategoryRepository;
 import com.app.backend.repository.SubcategoryRepository;
 import com.app.backend.repository.ProductRepository;
@@ -11,7 +11,6 @@ import java.util.Map;
 
 @Service
 public class StatsService {
-
     @Autowired
     private UserRepository userRepository;
 
@@ -28,8 +27,9 @@ public class StatsService {
         Map<String, Long> stats = new HashMap<>();
         stats.put("users", userRepository.count());
         stats.put("categories", categoryRepository.count());
-        stats.put("subCategories", subcategoryRepository.count());
+        stats.put("subcategories", subcategoryRepository.count());
         stats.put("products", productRepository.count());
+
         return stats;
     }
 }
