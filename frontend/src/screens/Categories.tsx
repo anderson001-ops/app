@@ -146,119 +146,113 @@ export default function CategoriesScreen() {
                             onPress={() => handleDelete(item)}>
                             <Text style={[categoriesStyles.actionButtonText, categoriesStyles.deleteButtonText]}>Eliminar</Text>
                         </TouchableOpacity>
-                    )
-                }
+                    )}
                 </View>
             </View>
         );
     };
 
-    if (loading) {
+
+        if (loading) {
+            return (
+                <View style={categoriesStyles.loadingContainer}>
+                    <ActivityIndicator size="large" color="#007Aff" />
+                    <Text style={categoriesStyles.loadingText}>Cargando...</Text>
+                </View>
+            );
+        }
         return (
-            <View style={categoriesStyles.loadingContainer}>
-                <ActivityIndicator size="large" color="#007Aff" />
-                <Text style={categoriesStyles.loadingText}>Cargando...
-                </Text>
-            </View>
-        );
-}
-    return (
-        <View style={categoriesStyles.container}>
-            <View style={categoriesStyles.header}>
-                <View style={categoriesStyles.headerContent}>
-                    <Text style={categoriesStyles.headerTitle}>Gestion de Categorias</Text>
-                    <TouchableOpacity
-                        style={categoriesStyles.addButton}
-                        onPress={() => {
-                            resetForm();
-                            setModalVisible(true);
-                        }}
-                    >
-                        <Text style={categoriesStyles.addButtonText}>+nueva</Text>
-                    </TouchableOpacity>
-                </View> 
-            </View>
-            {error ? (
-                <View style={categoriesStyles.errorContainer}>
-                    <Text style={categoriesStyles.errorText}>{error}</Text>
+            <View style={categoriesStyles.container}>
+                <View style={categoriesStyles.header}>
+                    <View style={categoriesStyles.headerContent}>
+                        <Text style={categoriesStyles.headerTitle}>Gestion de categorias</Text>
+                        <TouchableOpacity
+                            style={categoriesStyles.addButton}
+                            onPress={() => {
+                                resetForm();
+                                setModalVisible(true);
+                            }}
+                        >
+                            <Text style={categoriesStyles.addButtonText}>+ Nueva</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-                <TouchableOpacity style={categoriesStyles.retryButton} onPress={loadCategories}>
-                    <Text style={categoriesStyles.retryButtonText}>Reintentar</Text>
-                </TouchableOpacity>
-                </View>
-            ) :null}
+
+                {error ? (
+                    <View style={categoriesStyles.errorContainer}>
+                        <Text style={categoriesStyles.errorText}>{error}</Text>
+                        <TouchableOpacity style={categoriesStyles.retryButton} onPress={loadCategories}>
+                            <Text style={categoriesStyles.retryButtonText}>Reintentar</Text>
+                        </TouchableOpacity>
+                    </View>
+                ) : null}
+
                 <FlatList
                     data={categories}
                     renderItem={renderCategory}
-                    keyExtractor={(item) => item.id.toString()|| ''}
+                    keyExtractor={(item) => item.id.toString() || ''}
                     contentContainerStyle={categoriesStyles.listContent}
                     showsVerticalScrollIndicator={false}
                     ListEmptyComponent={
-                        !loading && !error?(
+                        !loading && !error ? (
                             <View style={categoriesStyles.emptyContainer}>
-                                <Text style={categoriesStyles.emptyText}
-                                >No hay categorías</Text>
-                                <Text style={categoriesStyles.emptySubText}
-                                >toca "nueva" para comenzar</Text>
+                                <Text style={categoriesStyles.emptyText}>No hay categorias</Text>
+                                <Text style={categoriesStyles.emptySubtext}>Toca "Nueva" para comenzar</Text>
                             </View>
-                        ):null
+                        ) : null
                     }
-                    />
-                <Modal animationType="slide" transparent={true} visible={modalVisible}>
+                />
+
+                <Modal animationType='slide' transparent={true} visible={modalVisible}>
                     <View style={categoriesStyles.modalOverlay}>
-                        <View style={categoriesStyles.modalContainer}>
+                        <View style={categoriesStyles.modalContent}>
                             <ScrollView>
-                                <View style={categoriesStyles.modalContent}>
-                                    <Text style={categoriesStyles.modalTitle}>
-                                        {editing ? 'Editar Categoría' : 'Nueva Categoría'}
-                                    </Text>
+                                <Text style={categoriesStyles.modalTitle}>{editing ? 'Editar Categoría' : 'Nueva Categoría'}</Text>
+                                <View style={categoriesStyles.formContainer}>
+                                    <View style={categoriesStyles.inputGroup}>
+                                        <Text style={categoriesStyles.inputLabel}>Nombre *</Text>
+                                        <TextInput
+                                            style={categoriesStyles.input}
+                                            value={formData.name}
+                                            onChangeText={(text) => setFormData({ ...formData, name: text })}
+                                            placeholder="Nombre de la categoría"
+                                            placeholderTextColor="#999"
+                                        />
                                     </View>
-                                    <View style={categoriesStyles.formContainer}>
-                                        <View style={categoriesStyles.inputGroup}>
-                                            <Text style={categoriesStyles.inputLabel}>Nombre</Text> 
-                                            <TextInput
-                                                style={categoriesStyles.input}
-                                                value={formData.name}
-                                                onChangeText={(text) => setFormData({ ...formData, name: text })}
-                                                placeholder="Nombre de la categoría"
-                                                placeholderTextColor="#999"
-                                                />
-                                        </View>
-                                        <View style={categoriesStyles.inputGroup}>
-                                            <View style={categoriesStyles.inputLabel}>
-                                                <Text style={categoriesStyles.inputLabel}>Descripción</Text>
-                                            <TextInput
-                                                style={[categoriesStyles.input, categoriesStyles.textArea]}
-                                                value={formData.description}
-                                                onChangeText={(text) => setFormData({ ...formData, description: text })}
-                                                placeholder="Descripción opcional"
-                                                placeholderTextColor="#999"
-                                                multiline
-                                                numberOfLines={3}
-                                                text AlignVertical="top"
-                                                />
-                                            </View>
-                                        </View>
-                                        <View style={categoriesStyles.modalButtons}>
-                                            <TouchableOpacity
-                                                style={[categoriesStyles.modalButton, categoriesStyles.cancelButton]}
-                                                onPress={() => setModalVisible(false)}
-                                                    >
-                                                <Text style={[categoriesStyles.modalButtonText, categoriesStyles.cancelButtonText]}>Cancelar</Text>
-                                            </TouchableOpacity>
-                                            <TouchableOpacity
-                                                style={[categoriesStyles.modalButton, categoriesStyles.saveButton]}
-                                                onPress={handleSave}
-                                                    >
-                                                <Text style={[categoriesStyles.modalButtonText, categoriesStyles.saveButtonText]}>
-                                                {editing ? 'actualizar ' : 'crear'}
-                                                </Text>
-                                            </TouchableOpacity>
-                                        </View>
+                                    <View style={categoriesStyles.inputGroup}>
+                                        <Text style={categoriesStyles.inputLabel}>Descripción *</Text>
+                                        <TextInput
+                                            style={[categoriesStyles.input, categoriesStyles.textArea]}
+                                            value={formData.description}
+                                            onChangeText={(text) => setFormData({ ...formData, description: text })}
+                                            placeholder="Descripción opcional"
+                                            placeholderTextColor="#999"
+                                            multiline
+                                            numberOfLines={3}
+                                            textAlignVertical='top'
+                                        />
+                                    </View>
+                                </View>
+                                <View style={categoriesStyles.modalButtons}>
+                                    <TouchableOpacity
+                                        style={[categoriesStyles.modalButton, categoriesStyles.cancelButton]}
+                                        onPress={() => setModalVisible(false)}
+                                    >
+                                        <Text style={[categoriesStyles.modalButtonText, categoriesStyles.cancelButtonText]}>Cancelar</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                        style={[categoriesStyles.modalButton, categoriesStyles.saveButton]}
+                                        onPress={handleSave}
+                                    >
+                                        <Text style={[categoriesStyles.modalButtonText, categoriesStyles.saveButtonText]}>
+                                            {editing ? 'Actualizar' : 'Crear'}
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
                             </ScrollView>
                         </View>
                     </View>
                 </Modal>
-        </View>
-    );
-}
+            </View>
+        );
+    }
